@@ -1,0 +1,50 @@
+/srv
+├── pillar
+│   ├── applist.sls
+│   ├── set_app_version_id.sls
+│   └── top.sls
+└── salt
+    └── APP1
+        └── env1
+            ├── artifacts
+            ├── config
+            │   ├── AppList.yaml
+            │   ├── AppMasterInfo.yaml
+            │   ├── APPNAME.envconfig.REL.jinja
+            │   ├── APPNAME.win_services.REL.jinja
+            │   ├── pkgs_iis.yaml
+            │   ├── registry.REL.jinja
+            │   └── release.manifest.REL
+            ├── formulas
+            │   ├── artifacts
+            │   │   ├── config_changes.sls
+            │   │   ├── copy_artifacts.sls
+            │   │   └── init.sls
+            │   ├── custom_commands
+            │   │   ├── start_application.sls
+            │   │   └── stop_application.sls
+            │   ├── registry_edit
+            │   │   └── init.sls
+            │   └── win_services
+            │       ├── dotnet4
+            │       │   ├── init.sls
+            │       │   └── map.jinja
+            │       ├── iis_features.sls
+            │       ├── init.sls
+            │       ├── packages.sls
+            │       ├── start_WinServices.sls
+            │       ├── stop_WinServices.sls
+            │       ├── windows_mgt.sls
+            │       └── windows_service.sls
+            ├── log
+            ├── scripts
+            │   ├── addNewEnv.sh
+            │   ├── deleteEnv.sh
+            │   ├── deployCode.sh
+            │   ├── filter.py
+            │   ├── moveArtifacts.sh
+            │   └── verifyServerKey.py
+            ├── tmp
+            └── top.sls
+
+15 directories, 32 files
