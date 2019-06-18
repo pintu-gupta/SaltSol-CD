@@ -1,0 +1,70 @@
+{% from 'config/JGCommon.win_services.' + pillar['RelNum'] + '.jinja' import config with context %}
+{% set solutionConfig = config.details %}
+# Initialize 'dotnet4' dictionary with default settings for the dotnet4 formula
+{% set dotnet4 = {
+    'version': solutionConfig.dotnet4.version,
+    'hotfix_os': False,
+} %}
+
+{#
+    On Windows 8 or later, and Windows Server 2012 or later, .NET is built into
+    the OS in a way that pkg.installed cannot check for. .NET only shows up in
+    the list of installed updates. Therefore, we need a lookup table that maps
+    .NET version numbers to Hotfix KB ID numbers. The formula will use this
+    information to check whether the specified version is already installed.
+#}
+
+{% set dotnet_ver_to_hotfix = {
+    '8.1': {
+        '4.5.51209' : 'KB2934520',
+        '4.6.00081' : 'KB3045563',
+        '4.6.01055' : 'KB3102467',
+        '4.6.01590' : 'KB3151864',
+        '4.7.02053' : 'KB3186539',
+        '4.7.02558' : 'KB4033369',
+        '4.7.03062' : 'KB4054566',
+    },
+    '10': {
+        '4.6.01055' : 'KB3102495',
+        '4.6.01590' : 'KB3151900',
+        '4.7.02053' : 'KB3186568',
+        '4.7.02558' : 'KB4033393',
+        '4.7.03062' : 'KB4054590',
+    },
+    '2012ServerR2': {
+        '4.5.51209' : 'KB2934520',
+        '4.6.00081' : 'KB3045563',
+        '4.6.01055' : 'KB3102467',
+        '4.6.01590' : 'KB3151864',
+        '4.7.02053' : 'KB3186539',
+        '4.7.02558' : 'KB4033369',
+        '4.7.03062' : 'KB4054566',
+    },
+    '2016Server': {
+        '4.6.01590' : 'KB3151900',
+        '4.7.02053' : 'KB3186568',
+        '4.7.02558' : 'KB4033393',
+        '4.7.03062' : 'KB4054590',
+    },
+    '2019Server': {
+        '4.7.03062' : 'KB3186497',
+    }
+
+} %}
+
+# Override defaults with user-defined settings from pillar (if available)
+{# do dotnet4.update(salt.pillar.get('dotnet4:lookup', {})) #}
+
+# Add dotnet hotfix ids to the dotnet dictionary
+{% if salt.grains.get('osrelease', '') in dotnet_ver_to_hotfix.keys() %}
+  {% set hotfix_map = salt.grains.filter_by(
+      dotnet_ver_to_hotfix,
+      grain='osrelease',
+  ) %}
+
+  {% do dotnet4.update({
+      'hotfix_ids': (hotfix_map.values()|list)[(hotfix_map.keys()|list).index(dotnet4['version']):],
+      'hotfix_os': True,
+  }) %}
+{% endif %}
+
