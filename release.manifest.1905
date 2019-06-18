@@ -1,0 +1,10 @@
+releases:
+  App1:
+    artifact_name: sample-project-maven-1.0.2.A
+    version: 1.0.2
+  App2:
+    artifact_name: sample-project-maven-1.0.2.B
+    version: 1.0.2
+  App3:
+    artifact_name: sample-project-maven-1.0.2
+    version: 1.0.2
