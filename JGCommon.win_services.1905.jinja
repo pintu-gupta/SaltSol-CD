@@ -1,0 +1,43 @@
+{%- load_yaml as config %}
+details:
+  dotnet4:
+    version: 4.7.02053
+  features_to_install:
+    - Web-Server
+    - Web-WebServer
+  binding:
+    - protocol: https
+      cert_name: servername
+      hostname: {{ grains['fqdn'] }}
+      sslflags: 1
+  iis_config:
+    - apppoolname: DefaultAppPool
+      sitename: Default Web Site
+      appname: QQWeb
+      container: AppPools
+      managedPipelineMode: Integrated
+      ManagedRuntimeVersion: "v4.0"
+      enable32BitAppOnWin64: False
+      processModel_idleTimeout: "00:20:00"
+      recycling_periodicRestart_time: "00:05:00"
+      processModel_username: user
+      processModel_password: password
+    - apppoolname: PSLAdmin
+      sitename: Default Web Site
+      appname: PSLAdmin
+      container: AppPools
+      managedPipelineMode: Integrated
+      ManagedRuntimeVersion: "v4.0"
+      enable32BitAppOnWin64: False
+      processModel_idleTimeout: "00:20:00"
+      recycling_periodicRestart_time: "00:05:00"
+      processModel_username: user
+      processModel_password: password
+  authentication_types:
+    - name: anonymousAuthentication
+      enabled: False
+    - name: windowsAuthentication
+      enabled: True
+
+{%- endload %}
+
